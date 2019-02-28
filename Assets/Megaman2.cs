@@ -154,8 +154,17 @@ public class Megaman2 : MonoBehaviour
         moduleId = moduleIdCounter++;
         Points.text = PointsLeft.ToString();
 
-        selectedMaster = Random.Range(0, RobotMastersMat.Length);
-        selectedWeapon = Random.Range(0, WeaponsMat.Length);
+        var Dif = Enumerable.Range(0, RobotMastersMat.Length).ToList();
+
+        int ix = Random.Range(0, Dif.Count);
+
+        selectedMaster = Dif[Random.Range(0, Dif.Count)];
+
+        Dif.RemoveAt(ix);
+
+        int ix2 = Random.Range(0, Dif.Count);
+
+        selectedWeapon = Dif[ix2];
 
         RobotMasters.GetComponent<MeshRenderer>().material = RobotMastersMat[selectedMaster];
         Weapons.GetComponent<MeshRenderer>().material = WeaponsMat[selectedWeapon];
