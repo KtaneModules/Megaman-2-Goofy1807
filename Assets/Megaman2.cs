@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -54,6 +54,7 @@ public class Megaman2 : MonoBehaviour
 
     void Awake()
     {
+        
         Grid = new[]
         {
             new[] { GridPoints[0], GridPoints[1], GridPoints[2], GridPoints[3], GridPoints[4] },
@@ -316,6 +317,51 @@ public class Megaman2 : MonoBehaviour
         }
 
         Debug.LogFormat(@"[Megaman 2 #{0}] Password is: {1}", moduleId, Enumerable.Range(0, 5).SelectMany(row => Enumerable.Range(0, 5).Where(col => calculatedPattern[row][col]).Select(col => (char)('A' + row) + (col + 1).ToString())).Join(", "));
+    }
+    public string TwitchHelpMessage = "Use '!{0} press a1 a2 b1' to press button a1, a2 and b1! Don't use capitals!";
+    IEnumerator ProcessTwitchCommand(string command)
+	{
+        var indexes = new List<string>();
+        indexes.Add("a1");
+        indexes.Add("a2");
+        indexes.Add("a3");
+        indexes.Add("a4");
+        indexes.Add("a5");
+        indexes.Add("b1");
+        indexes.Add("b2");
+        indexes.Add("b3");
+        indexes.Add("b4");
+        indexes.Add("b5");
+        indexes.Add("c1");
+        indexes.Add("c2");
+        indexes.Add("c3");
+        indexes.Add("c4");
+        indexes.Add("c5");
+        indexes.Add("d1");
+        indexes.Add("d2");
+        indexes.Add("d3");
+        indexes.Add("d4");
+        indexes.Add("d5");
+        indexes.Add("e1");
+        indexes.Add("e2");
+        indexes.Add("e3");
+        indexes.Add("e4");
+        indexes.Add("e5");
+        
+        string commfinal=command.Replace("press ", "");
+		string[] digitstring = commfinal.Split(' ');
+		int tried;
+		int index =1;
+        foreach(string current in digitstring){
+            if(indexes.IndexOf(current)>-1){
+                yield return GridPoints[indexes.IndexOf(current)];
+            }
+            else{
+                yield return null;
+				yield return "sendtochaterror Location not valid.";
+				yield break;
+            }
+        }
     }
 
 
