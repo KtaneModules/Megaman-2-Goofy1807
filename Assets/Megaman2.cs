@@ -69,13 +69,6 @@ public class Megaman2 : MonoBehaviour
             for (int j = 0; j < 5; j++)
             {
                 Grid[i][j].OnInteract += GridPress(i, j);
-            }
-        }
-
-        for (int i = 0; i < 5; i++)
-        {
-            for (int j = 0; j < 5; j++)
-            {
                 Grid[i][j].OnSelect += GridSelect(i, j);
             }
         }
@@ -151,21 +144,18 @@ public class Megaman2 : MonoBehaviour
 
     void Start()
     {
-        Time = (int)BombInfo.GetTime();
+        Time = (int) BombInfo.GetTime();
         moduleId = moduleIdCounter++;
         Points.text = PointsLeft.ToString();
 
-        var Dif = Enumerable.Range(0, RobotMastersMat.Length).ToList();
+        var dif = Enumerable.Range(0, RobotMastersMat.Length).ToList();
 
-        int ix = Random.Range(0, Dif.Count);
+        int ix = Random.Range(0, dif.Count);
+        selectedMaster = dif[ix];
+        dif.RemoveAt(ix);
 
-        selectedMaster = Dif[Random.Range(0, Dif.Count)];
-
-        Dif.RemoveAt(ix);
-
-        int ix2 = Random.Range(0, Dif.Count);
-
-        selectedWeapon = Dif[ix2];
+        int ix2 = Random.Range(0, dif.Count);
+        selectedWeapon = dif[ix2];
 
         RobotMasters.GetComponent<MeshRenderer>().material = RobotMastersMat[selectedMaster];
         Weapons.GetComponent<MeshRenderer>().material = WeaponsMat[selectedWeapon];
