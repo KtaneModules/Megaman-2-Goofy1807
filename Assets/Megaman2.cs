@@ -1,15 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Linq;
+using System.Text.RegularExpressions;
 using KModkit;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class Megaman2 : MonoBehaviour
 {
-
     public KMAudio Audio;
     public KMBombInfo BombInfo;
     public KMBombModule BombModule;
@@ -51,10 +50,8 @@ public class Megaman2 : MonoBehaviour
 
     private bool Started = false;
 
-
     void Awake()
     {
-        
         Grid = new[]
         {
             new[] { GridPoints[0], GridPoints[1], GridPoints[2], GridPoints[3], GridPoints[4] },
@@ -73,14 +70,13 @@ public class Megaman2 : MonoBehaviour
             }
         }
 
-        BombModule.GetComponent<KMSelectable>().OnInteract += delegate 
+        BombModule.GetComponent<KMSelectable>().OnInteract += delegate
         {
             if (!Started)
                 Audio.PlaySoundAtTransform("Start", transform);
             Started = true;
             return true;
         };
-
     }
 
     private KMSelectable.OnInteractHandler GridPress(int row, int col)
@@ -132,7 +128,7 @@ public class Megaman2 : MonoBehaviour
     {
         return delegate ()
         {
-            if(lastCursor != null)
+            if (lastCursor != null)
                 Destroy(lastCursor);
             lastCursor = Instantiate(Cursor);
             lastCursor.transform.parent = Grid[row][col].transform;
@@ -161,7 +157,6 @@ public class Megaman2 : MonoBehaviour
         Weapons.GetComponent<MeshRenderer>().material = WeaponsMat[selectedWeapon];
 
         CalculatePattern();
-
     }
 
     void CalculatePattern()
@@ -306,53 +301,29 @@ public class Megaman2 : MonoBehaviour
             }
         }
 
-        Debug.LogFormat(@"[Megaman 2 #{0}] Password is: {1}", moduleId, Enumerable.Range(0, 5).SelectMany(row => Enumerable.Range(0, 5).Where(col => calculatedPattern[row][col]).Select(col => (char)('A' + row) + (col + 1).ToString())).Join(", "));
+        Debug.LogFormat(@"[Megaman 2 #{0}] Password is: {1}", moduleId, Enumerable.Range(0, 5).SelectMany(row => Enumerable.Range(0, 5).Where(col => calculatedPattern[row][col]).Select(col => (char) ('A' + row) + (col + 1).ToString())).Join(", "));
     }
-    public string TwitchHelpMessage = "Use '!{0} press a1 a2 b1' to press button a1, a2 and b1! Don't use capitals!";
+    private string TwitchHelpMessage = "!{0} press a1 a2 b1 [press button a1, a2 and b1]";
     IEnumerator ProcessTwitchCommand(string command)
-	{
-        var indexes = new List<string>();
-        indexes.Add("a1");
-        indexes.Add("a2");
-        indexes.Add("a3");
-        indexes.Add("a4");
-        indexes.Add("a5");
-        indexes.Add("b1");
-        indexes.Add("b2");
-        indexes.Add("b3");
-        indexes.Add("b4");
-        indexes.Add("b5");
-        indexes.Add("c1");
-        indexes.Add("c2");
-        indexes.Add("c3");
-        indexes.Add("c4");
-        indexes.Add("c5");
-        indexes.Add("d1");
-        indexes.Add("d2");
-        indexes.Add("d3");
-        indexes.Add("d4");
-        indexes.Add("d5");
-        indexes.Add("e1");
-        indexes.Add("e2");
-        indexes.Add("e3");
-        indexes.Add("e4");
-        indexes.Add("e5");
-        
-        string commfinal=command.Replace("press ", "");
-		string[] digitstring = commfinal.Split(' ');
-		int tried;
-		int index =1;
-        foreach(string current in digitstring){
-            if(indexes.IndexOf(current)>-1){
-                yield return GridPoints[indexes.IndexOf(current)];
-            }
-            else{
-                yield return null;
-				yield return "sendtochaterror Location not valid.";
-				yield break;
-            }
+    {
+        var m = Regex.Match(command, @"^\s*(?:press +)?((?:[a-e][1-5] *)+)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        if(!m.Success)
+            yield break;
+
+        var buttonsToPress = new List<KMSelectable>();
+
+        foreach (var btn in m.Groups[1].Value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            if(btn.Length != 2)
+                yield break;
+            var row = char.ToLowerInvariant(btn[0]) - 'a';
+            var col = btn[1] - '1';
+            if(row<0||row>=5||col<0||col>=5)
+                yield break;
+            buttonsToPress.Add(GridPoints[col + 5 * row]);
         }
+
+        yield return null;
+        yield return buttonsToPress;
     }
-
-
 }
