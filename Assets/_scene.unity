@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44658846, g: 0.49642324, b: 0.5748258, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -267,6 +267,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!23 &1184984691 stripped
+MeshRenderer:
+  m_PrefabParentObject: {fileID: 23345544021949756, guid: 91223eb3c4ca14546a8d207b0061af81,
+    type: 2}
+  m_PrefabInternal: {fileID: 1445159363}
 --- !u!1001 &1239732873
 Prefab:
   m_ObjectHideFlags: 0
@@ -413,6 +418,20 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114308265011148774, guid: 91223eb3c4ca14546a8d207b0061af81,
+        type: 2}
+      propertyPath: WeaponsDisplay
+      value: 
+      objectReference: {fileID: 1184984691}
+    - target: {fileID: 4903212832333694, guid: 91223eb3c4ca14546a8d207b0061af81, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.0102
+      objectReference: {fileID: 0}
+    - target: {fileID: 114308265011148774, guid: 91223eb3c4ca14546a8d207b0061af81,
+        type: 2}
+      propertyPath: Empty
+      value: 
+      objectReference: {fileID: 2800000, guid: 416cb88293fd43147a86356e1efe62da, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 91223eb3c4ca14546a8d207b0061af81, type: 2}
   m_IsPrefabParent: 0

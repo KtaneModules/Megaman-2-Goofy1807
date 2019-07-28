@@ -22,6 +22,8 @@ public class Megaman2 : MonoBehaviour
 
     public Texture[] RobotMasters;
     public Texture[] Weapons;
+    public Texture Border;
+    public Texture Empty;
 
     public MeshRenderer RobotMastersDisplay;
     public MeshRenderer WeaponsDisplay;
@@ -110,6 +112,9 @@ public class Megaman2 : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         Audio.PlaySoundAtTransform("Solve" + Random.Range(1, 5), transform);
         moduleSolved = true;
+        RobotMastersDisplay.material.mainTexture = Border;
+        WeaponsDisplay.material.mainTexture = Empty;
+
     }
 
     private Action GridSelect(int row, int col)
