@@ -34,6 +34,9 @@ public class Megaman2 : MonoBehaviour
     private static int moduleIdCounter = 1;
     private int moduleId;
     private bool moduleSolved;
+    private string[] robotMasters;
+    private int selectedMaster;
+    private int selectedWeapon;
     private int time, day, month;
     private KMSelectable[][] grid;
     private bool started = false;
@@ -181,7 +184,7 @@ public class Megaman2 : MonoBehaviour
         // ** RULE SEED ** //
         var rnd = RuleSeedable.GetRNG();
         Debug.LogFormat(@"[Mega Man 2 #{0}] Using rule seed: {1}", moduleId, rnd.Seed);
-        var robotMasters = rnd.Seed == 1
+        robotMasters = rnd.Seed == 1
             ? new[] { "Air Man", "Bubble Man", "Crash Man", "Flash Man", "Heat Man", "Metal Man", "Quick Man", "Wood Man" }
             : rnd.ShuffleFisherYates(new[] { "Cold Man", "Magma Man", "Dust Man", "Sword Man", "Splash Woman", "Ice Man", "Quick Man", "Hard Man", "Pharaoh Man", "Charge Man", "Pirate Man", "Pump Man", "Galaxy Man", "Grenade Man", "Snake Man", "Burst Man", "Cut Man", "Air Man", "Magnet Man", "Toad Man", "Gyro Man", "Tomahawk Man", "Wood Man", "Strike Man", "Blade Man", "Aqua Man", "Shade Man", "Flash Man", "Flame Man", "Concrete Man", "Metal Man", "Needle Man", "Wave Man", "Knight Man", "Slash Man", "Shadow Man", "Sheep Man", "Ground Man", "Wind Man", "Fire Man", "Stone Man", "Tengu Man", "Bright Man", "Centaur Man", "Cloud Man", "Frost Man", "Dynamo Man", "Chill Man", "Turbo Man", "Napalm Man", "Jewel Man", "Drill Man", "Freeze Man", "Blizzard Man", "Gravity Man", "Junk Man", "Clown Man", "Hornet Man", "Skull Man", "Solar Man", "Commando Man", "Yamato Man", "Dive Man", "Search Man", "Gemini Man", "Bubble Man", "Guts Man", "Tornado Man", "Astro Man", "Plug Man", "Elec Man", "Crystal Man", "Nitro Man", "Burner Man", "Spark Man", "Spring Man", "Plant Man", "Star Man", "Ring Man", "Top Man", "Crash Man", "Bomb Man", "Heat Man", "Magic Man" });
 
@@ -339,29 +342,29 @@ public class Megaman2 : MonoBehaviour
         var availableRobotMasterIxs = Enumerable.Range(0, 8).ToList();
 
         int ix = Random.Range(0, availableRobotMasterIxs.Count);
-        var selectedMaster = availableRobotMasterIxs[ix];
+        selectedMaster = availableRobotMasterIxs[ix];
         availableRobotMasterIxs.RemoveAt(ix);
-        var selectedWeapon = availableRobotMasterIxs[Random.Range(0, availableRobotMasterIxs.Count)];
+        selectedWeapon = availableRobotMasterIxs[Random.Range(0, availableRobotMasterIxs.Count)];
 
-        RobotMastersDisplay.material.mainTexture = RobotMasters.First(tx => tx.name == robotMasters[selectedMaster]);
-        WeaponsDisplay.material.mainTexture = Weapons.First(tx => tx.name == robotMasters[selectedWeapon]);
+        RobotMastersDisplay.sharedMaterial.mainTexture = RobotMasters.First(tx => tx.name == robotMasters[selectedMaster]);
+        WeaponsDisplay.sharedMaterial.mainTexture = Weapons.First(tx => tx.name == robotMasters[selectedWeapon]);
 
         solution = new string[9];
         solution[8] = "A" + eTank;
-        Debug.LogFormat(@"[Megaman 2 #{0}] ETanks spot is: {1}", moduleId, solution[8]);
+        Debug.LogFormat(@"[Mega Man 2 #{0}] ETanks spot is: {1}", moduleId, solution[8]);
 
         for (int i = 0; i < 8; i++)
         {
             var alive = i == selectedMaster ? true : i == selectedWeapon ? false : aliveConditions[i].Evaluate(eTank);
-            Debug.LogFormat(@"[Megaman 2 #{0}] {1} is {2} ({3})", moduleId, robotMasters[i], alive ? "alive" : "dead", i == selectedMaster ? "robot master shown on module" : i == selectedWeapon ? "weapon shown on module" : aliveConditions[i].Text + " = " + (aliveConditions[i].Evaluate(eTank) ? "true" : "false"));
+            Debug.LogFormat(@"[Mega Man 2 #{0}] {1} is {2} ({3})", moduleId, robotMasters[i], alive ? "alive" : "dead", i == selectedMaster ? "robot master shown on module" : i == selectedWeapon ? "weapon shown on module" : aliveConditions[i].Text + " = " + (aliveConditions[i].Evaluate(eTank) ? "true" : "false"));
             solution[i] = alive ? coordinates[i].AliveCoord : coordinates[i].DeadCoord;
         }
 
-        Debug.LogFormat(@"[Megaman 2 #{0}] Password is: {1}", moduleId, solution.Join(", "));
+        Debug.LogFormat(@"[Mega Man 2 #{0}] Password is: {1}", moduleId, solution.Join(", "));
     }
 
-
     private string TwitchHelpMessage = "!{0} press a1 a2 b1 [press button a1, a2 and b1]";
+
     IEnumerator ProcessTwitchCommand(string command)
     {
         var m = Regex.Match(command, @"^\s*(?:press +)?((?:[a-e][1-5] *)+)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);

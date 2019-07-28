@@ -2870,7 +2870,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1801437378709842}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: -0.048, y: 0.0101, z: -0.06}
+  m_LocalPosition: {x: -0.048, y: 0.0102, z: -0.06}
   m_LocalScale: {x: 0.00225, y: 0.0009, z: 0.00235}
   m_Children: []
   m_Father: {fileID: 4547975724866880}
@@ -3378,7 +3378,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 10d25769fa813094c80eab895de09a02, type: 2}
+  - {fileID: 2100000, guid: 7c4a52e0ed3644649819ddb4e9d5dbaa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3684,7 +3684,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 10d25769fa813094c80eab895de09a02, type: 2}
+  - {fileID: 2100000, guid: 00e176d434f4af04b8a2f90e2bcd886a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5510,8 +5510,9 @@ MonoBehaviour:
   - {fileID: 2800000, guid: a1584d01a5608884a89578c069c3b930, type: 3}
   - {fileID: 2800000, guid: d91c7978b865ac148856cb3afe2ad9b8, type: 3}
   Border: {fileID: 2800000, guid: 661383b8049d9764088103a45b0383cc, type: 3}
+  Empty: {fileID: 2800000, guid: 416cb88293fd43147a86356e1efe62da, type: 3}
   RobotMastersDisplay: {fileID: 23295401560717064}
-  WeaponsDisplay: {fileID: 23552516295461378}
+  WeaponsDisplay: {fileID: 23345544021949756}
 --- !u!114 &114313484773969360
 MonoBehaviour:
   m_ObjectHideFlags: 1
