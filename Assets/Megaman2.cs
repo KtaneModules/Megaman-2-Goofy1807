@@ -346,8 +346,8 @@ public class Megaman2 : MonoBehaviour
         availableRobotMasterIxs.RemoveAt(ix);
         selectedWeapon = availableRobotMasterIxs[Random.Range(0, availableRobotMasterIxs.Count)];
 
-        RobotMastersDisplay.sharedMaterial.mainTexture = RobotMasters.First(tx => tx.name == robotMasters[selectedMaster]);
-        WeaponsDisplay.sharedMaterial.mainTexture = Weapons.First(tx => tx.name == robotMasters[selectedWeapon]);
+        RobotMastersDisplay.material.mainTexture = RobotMasters.First(tx => tx.name == robotMasters[selectedMaster]);
+        WeaponsDisplay.material.mainTexture = Weapons.First(tx => tx.name == robotMasters[selectedWeapon]);
 
         solution = new string[9];
         solution[8] = "A" + eTank;
