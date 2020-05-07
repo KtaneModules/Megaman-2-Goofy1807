@@ -42,6 +42,7 @@ public class Megaman2 : MonoBehaviour
     private bool started = false;
     private string[] solution;
     private readonly List<string> pressed = new List<string>();
+    private bool introMusicFinished = false;
 
     void Awake()
     {
@@ -63,13 +64,23 @@ public class Megaman2 : MonoBehaviour
             }
         }
 
-        ModuleSelectable.OnInteract += delegate
+        this.ModuleSelectable.OnInteract += delegate
         {
             if (!started)
-                Audio.PlaySoundAtTransform("Start" + Random.Range(1, 5), transform);
+            {
+                StartCoroutine(PlayStartSound(Random.Range(0, 4)));
+            }
             started = true;
             return true;
         };
+    }
+
+    private IEnumerator PlayStartSound(int i)
+    {
+        var lengths = new[] { 6.4f, 5.4f, 5.5f, 5.5f };
+        Audio.PlaySoundAtTransform("Start" + (i + 1), transform);
+        yield return new WaitForSeconds(lengths[i]);
+        introMusicFinished = true;
     }
 
     private KMSelectable.OnInteractHandler GridPress(int row, int col)
@@ -78,7 +89,7 @@ public class Megaman2 : MonoBehaviour
         {
             grid[row][col].AddInteractionPunch();
 
-            var coord = ((char) ('A' + row)) + "" + (col + 1);
+            var coord = ((char)('A' + row)) + "" + (col + 1);
 
             if (moduleSolved || pressed.Contains(coord))
             {
@@ -177,7 +188,7 @@ public class Megaman2 : MonoBehaviour
     void Start()
     {
         moduleId = moduleIdCounter++;
-        time = (int) BombInfo.GetTime();
+        time = (int)BombInfo.GetTime();
         day = DateTime.Now.Day;
         month = DateTime.Now.Month;
 
@@ -203,7 +214,7 @@ public class Megaman2 : MonoBehaviour
         var availableCoordinates = new List<string>();
         for (var row = 1; row < 5; row++)
             for (var col = 0; col < 5; col++)
-                availableCoordinates.Add((char) ('A' + row) + "" + (col + 1));
+                availableCoordinates.Add((char)('A' + row) + "" + (col + 1));
         for (int i = 0; i < 8; i++)
         {
             if (presetCoordinates.ContainsKey(robotMasters[i]))
@@ -369,7 +380,10 @@ public class Megaman2 : MonoBehaviour
     {
         var m = Regex.Match(command, @"^\s*(?:press +)?((?:[a-e][1-5] *)+)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         if (!m.Success)
+        {
+            yield return "sendtochaterror Innvalid Command";
             yield break;
+        }
 
         var buttonsToPress = new List<KMSelectable>();
 
@@ -386,5 +400,21 @@ public class Megaman2 : MonoBehaviour
 
         yield return null;
         yield return buttonsToPress;
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        Debug.LogFormat(@"[Mega Man 2 #{0}] Module was force solved by TP.", moduleId);
+
+        // In case the user has not touched the module at all yet
+        ModuleSelectable.OnInteract();
+        while (!introMusicFinished)
+            yield return true;
+
+        foreach (var coordinate in solution)
+        {
+            grid[coordinate[0] - 'A'][coordinate[1] - '1'].OnInteract();
+            yield return new WaitForSeconds(.1f);
+        }
     }
 }
