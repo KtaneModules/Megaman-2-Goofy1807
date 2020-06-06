@@ -37,7 +37,8 @@ public class Megaman2 : MonoBehaviour
     private string[] robotMasters;
     private int selectedMaster;
     private int selectedWeapon;
-    private int time, day, month;
+    private int day, month;
+    private int startingTimeSeconds;
     private KMSelectable[][] grid;
     private bool started = false;
     private string[] solution;
@@ -89,7 +90,7 @@ public class Megaman2 : MonoBehaviour
         {
             grid[row][col].AddInteractionPunch();
 
-            var coord = ((char)('A' + row)) + "" + (col + 1);
+            var coord = ((char) ('A' + row)) + "" + (col + 1);
 
             if (moduleSolved || pressed.Contains(coord))
             {
@@ -188,7 +189,7 @@ public class Megaman2 : MonoBehaviour
     void Start()
     {
         moduleId = moduleIdCounter++;
-        time = (int)BombInfo.GetTime();
+        startingTimeSeconds = (int) BombInfo.GetTime();
         day = DateTime.Now.Day;
         month = DateTime.Now.Month;
 
@@ -214,7 +215,7 @@ public class Megaman2 : MonoBehaviour
         var availableCoordinates = new List<string>();
         for (var row = 1; row < 5; row++)
             for (var col = 0; col < 5; col++)
-                availableCoordinates.Add((char)('A' + row) + "" + (col + 1));
+                availableCoordinates.Add((char) ('A' + row) + "" + (col + 1));
         for (int i = 0; i < 8; i++)
         {
             if (presetCoordinates.ContainsKey(robotMasters[i]))
@@ -299,7 +300,7 @@ public class Megaman2 : MonoBehaviour
         if (rnd.Seed != 1)
         {
             possibleAliveConditions.Add((op, presence) => { var number = rnd.Next(5, 31); return new Rule(string.Format("# of modules on the bomb {0} {1}", operatorNames[op], number), _ => ops(BombInfo.GetModuleNames().Count, number, op)); });
-            possibleAliveConditions.Add((op, presence) => { var number = rnd.Next(10, 61); return new Rule(string.Format("Starting time of the bomb {0} {1} minutes", operatorNames[op], number), _ => ops(time, number, op)); });
+            possibleAliveConditions.Add((op, presence) => { var number = rnd.Next(10, 61); return new Rule(string.Format("Starting time of the bomb {0} {1} minutes", operatorNames[op], number), _ => ops(startingTimeSeconds, number * 60, op)); });
         }
         rnd.ShuffleFisherYates(possibleAliveConditions);
 
